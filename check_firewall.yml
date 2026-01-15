@@ -1,0 +1,14 @@
+---
+- name: starting stuff
+  hosts: rhel9
+  gather_facts: no
+  tasks:
+    - name: getting fw info
+      ansible.posix.firewalld_info:
+        active_zones: true
+      register: fw
+
+    - name: show stuff
+      debug:
+        var: fw.firewalld_info.default_zone
+#        var: fw
