@@ -6,9 +6,23 @@
     - name: getting fw info
       ansible.posix.firewalld_info:
         active_zones: true
-      register: fw
+      #  zones:
+      register: fw_info
 
+    - name: open some ports
+      ansible.posix.firewalld:
+        permanent: true
+        zone: public
+        port: "{{ item }}"
+        immediate: true 
+        state: enabled
+      loop:
+        - 80/tcp
+        - 53/udp
+        - 443/tcp
+        - 68/udp 
+    
     - name: show stuff
       debug:
-        var: fw.firewalld_info.default_zone
-#        var: fw
+       # var: fw.firewalld_info.default_zone
+        var: fw_info
